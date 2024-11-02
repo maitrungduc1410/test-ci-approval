@@ -1,0 +1,20 @@
+name: 'Handle Deployment Rejection'
+
+on:
+  workflow_run:
+    workflows: ["Deploy app"]
+    types:
+      - completed
+
+jobs:
+  check-deployment-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Approval Status
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "Deployment rejected. Running cleanup or failure script."
+            # Add your failure handling script here
+          else
+            echo "Deployment approved and completed."
+          fi
