@@ -20,9 +20,13 @@ jobs:
     runs-on: 'ubuntu-latest'
     environment: 'dev'
     needs: build-and-publish
+    continue-on-error: true
     steps:
       - name: Deploy dev
         run: echo Deploy Dev...
+      - name: Step 3
+        if: ${{ failure() && steps.demo.conclusion == 'failure' }}
+        run: echo "And NOW this step will run"
 
   deploy-prod:
     runs-on: 'ubuntu-latest'
